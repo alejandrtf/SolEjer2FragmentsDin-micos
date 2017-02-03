@@ -2,6 +2,7 @@ package com.android.alejandra.ejlayoutestaticoconfragmentestaticoylayoutalt;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -24,10 +25,12 @@ import com.android.alejandra.ejlayoutestaticoconfragmentestaticoylayoutalt.model
  * interface.
  */
 public class LinkListFragment extends ListFragment {
-    private static final String TAG = "LinkListFragment" ;
+    private static final String TAG = "LinkListFragment";
+    private static final String ID_POSICION_LISTA_ELEGIDA = "pos";  //usado para guardar elemento elegido de la lista ante giros de pantalla
+    private static final int NINGUNA_POS_ELEGIDA = -1;
     //listener
     private OnListFragmentSelectionListener mListener;
-
+    private int posSeleccionadaActual = NINGUNA_POS_ELEGIDA;  //almacena la posición elegida en la listView. Usado para posibles giros pantalla
 
 
     /**
@@ -52,22 +55,21 @@ public class LinkListFragment extends ListFragment {
      * @param l        ListView
      * @param v        View sobre la que se pulsó
      * @param position posición que ocupa la vista sobre la que se pulsó, dentro de la listView
-     * @param id id
+     * @param id       id
      */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
 
-        //muestro el elemento seleccionado en diferente color
-        getListView().setSelector(R.color.colorAccentTransparent);
-        //obtengo el titulo pulsado
-         //aviso a mi listener con el título pulsado
-        mListener.onListFragmentSelection(((String)l.getItemAtPosition(position)));
+        //almaceno el elemento pulsado para luego restaurarlo
+        posSeleccionadaActual = position;
+        //obtengo el titulo pulsado y
+        //aviso a mi listener con el título pulsado
+        mListener.onListFragmentSelection(((String) l.getItemAtPosition(position)));
 
 
     }
-
 
 
     /**
@@ -77,23 +79,34 @@ public class LinkListFragment extends ListFragment {
     }
 
 
-
     //MÉTODOS CICLO VIDA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        /*en el caso de no usar ListFragment
-        ListView lv=(ListView)getView().findViewById(R.id.list_view);
-        lv.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, MainActivity.listaDatos);
-        */
+
         //asigno adaptador
-        setListAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,LinkData.getStringArrayTutorialesTitulo()));
+        setListAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, LinkData.getStringArrayTutorialesTitulo()));
+
+        if (savedInstanceState != null) {
+            // Restauro la última posición seleccionada
+            posSeleccionadaActual = savedInstanceState.getInt(ID_POSICION_LISTA_ELEGIDA, NINGUNA_POS_ELEGIDA);
+        }
+
+        //eligo tipo modo selección de la listview, para que me ilumine la opción pulsada
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        //muestro el elemento seleccionado en diferente color
+        getListView().setSelector(R.color.colorAccentTransparent);
+        //asigno la posición seleccionada
+        if (posSeleccionadaActual != NINGUNA_POS_ELEGIDA)
+            getListView().setItemChecked(posSeleccionadaActual, true);
+
 
     }
 
@@ -108,12 +121,8 @@ public class LinkListFragment extends ListFragment {
                     + " debe implementar OnListFragmentSelectionListener");
         }
     }
-/*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return(inflater.inflate(R.layout.layout_listado,container,false));
-    }
-*/
+
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -124,5 +133,9 @@ public class LinkListFragment extends ListFragment {
     //NO LLEVA onCreateView porque usaré la lista de texto básica que incluye como layout la clase ListFragment
 
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ID_POSICION_LISTA_ELEGIDA, posSeleccionadaActual);
+    }
 }
