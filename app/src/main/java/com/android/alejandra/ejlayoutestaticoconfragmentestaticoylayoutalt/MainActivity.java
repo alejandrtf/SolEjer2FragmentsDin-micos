@@ -1,17 +1,10 @@
 package com.android.alejandra.ejlayoutestaticoconfragmentestaticoylayoutalt;
 
 import android.content.Intent;
-import android.os.PersistableBundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.alejandra.ejlayoutestaticoconfragmentestaticoylayoutalt.model.LinkData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LinkListFragment.OnListFragmentSelectionListener {
     //lo usaré para guardar el estado del fragment detalle
@@ -23,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements LinkListFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_dual_panel_wide);
+        setContentView(R.layout.main);
 
         //cargo datos de los recursos
         LinkData.inicializarItemsFromResources(getResources().getStringArray(R.array.lista_enlaces_tutoriales_Android),
@@ -38,10 +31,19 @@ public class MainActivity extends AppCompatActivity implements LinkListFragment.
         String url = LinkData.ITEM_MAP.get(tituloElegido).getEnlaceContenido();
 
         wvFragment = (WebViewFragment) getSupportFragmentManager().findFragmentById(R.id.webFragment);
-        //muestro la url
-        if (!wvFragment.getActualUrl().equals(url))
-            wvFragment.mostrarUrl(url);
 
+        if(wvFragment==null){
+            //No hay fragment WebViewFragment. Por tanto, estamos en un dispositivo pequeño
+            //Lanzamos la otra activity
+            Intent i=new Intent(this,SegundaActivity.class);
+            i.putExtra(SegundaActivity.EXTRA_URL,url);
+            startActivity(i);
+        }
+        else {
+            //muestro la url
+            if (!wvFragment.getActualUrl().equals(url))
+                wvFragment.mostrarUrl(url);
+        }
 
     }
 

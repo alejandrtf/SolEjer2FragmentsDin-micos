@@ -138,4 +138,7 @@ public class LinkListFragment extends ListFragment {
         super.onSaveInstanceState(outState);
         outState.putInt(ID_POSICION_LISTA_ELEGIDA, posSeleccionadaActual);
     }
+
+
+
 }
