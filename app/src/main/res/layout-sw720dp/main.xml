@@ -6,19 +6,17 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <fragment
-            android:id="@+id/listFragment"
-            android:name="com.android.alejandra.ejlayoutestaticoconfragmentestaticoylayoutalt.LinkListFragment"
+        <FrameLayout
+            android:id="@+id/listFragmentContenedor"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            tools:layout="@android:layout/list_content" />
+            />
 
-        <fragment
-            android:id="@+id/webFragment"
-            android:name="com.android.alejandra.ejlayoutestaticoconfragmentestaticoylayoutalt.WebViewFragment"
+        <FrameLayout
+            android:id="@+id/webFragmentContenedor"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            tools:layout="@layout/web_layout" />
+            />
     </LinearLayout>

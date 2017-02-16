@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SolEjer1FragmentEstaticos.iml" filepath="$PROJECT_DIR$/SolEjer1FragmentEstaticos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SolEjer2FragmentsDinamicos.iml" filepath="$PROJECT_DIR$/SolEjer2FragmentsDinamicos.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

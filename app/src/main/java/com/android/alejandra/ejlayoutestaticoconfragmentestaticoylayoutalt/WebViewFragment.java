@@ -24,18 +24,34 @@ public class WebViewFragment extends Fragment {
     public WebViewFragment() {
     }
 
+/*Metodo factoría creación instancia fragment
+
+ */
+    public static WebViewFragment newInstance(String url) {
+        WebViewFragment fragment = new WebViewFragment();
+        if (url != null) {
+
+            Bundle args = new Bundle();
+            args.putString(URL_ARG_TUTORIAL_SELECCIONADO, url);
+            fragment.setArguments(args);
+        }
+        return fragment;
+    }
 
     public String getActualUrl() {
         return actualUrl;
     }
 
-
+/**Con la versión que funciona tanto en 2 activities como dentro de la misma, no usaremos este
+ * método. Esto lo gestiona el propio fragment desde el onCreateView
+ *
+ */
     /**
      * Método que mostrará la url que se pasa
      *
      * @param url url a mostrar
      */
-    public void mostrarUrl(String url) {
+  /*  public void mostrarUrl(String url) {
 
         //actualizo la url actual
         actualUrl = url;
@@ -51,14 +67,21 @@ public class WebViewFragment extends Fragment {
         }
     }
 
-
+*/
     //MÉTODOS DEL CICLO DE VIDA DEL FRAGMENT
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //inflo layout
-        View v=inflater.inflate(R.layout.web_layout, container, false);
-        webView= (WebView) v.findViewById(R.id.wvWebPage);
+        View v = inflater.inflate(R.layout.web_layout, container, false);
+        //obtengo la webview
+        webView = (WebView) v.findViewById(R.id.wvWebPage);
+        //activo javascript
+        if(webView!=null){
+            webView.getSettings().setJavaScriptEnabled(true);
+            //cargo la url
+            webView.loadUrl(actualUrl);
+        }
         return v;
 
     }
@@ -67,6 +90,12 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //recojo los parámetros del fragment
+        Bundle args=getArguments();
+        if(args!=null){
+            actualUrl=args.getString(URL_ARG_TUTORIAL_SELECCIONADO);
+        }
 
     }
 
