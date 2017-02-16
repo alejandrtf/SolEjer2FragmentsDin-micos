@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+
         <FrameLayout
             android:id="@+id/listFragmentContenedor"
             android:layout_width="0dp"
